@@ -24,56 +24,85 @@ def home():
 @app.route('/view', methods=['GET', 'POST'])
 def view_option():
     data = read_data()
-    subjects = [s['name'] for s in data['subjects']]
-    symbols = [s['name'] for s in data['symbols']]
-    results = []  # Initialize results to an empty list
-
     if request.method == 'POST':
-        selected_option = request.form.get('view_input')
-        selected_category = request.form.get('view_category')
+        category = request.form['view_category']
+        selected_option = request.form['view_input']
+        print("here3", category,selected_option)
+        results = []
+        if category == 'target_meaning' and selected_option in data['target_meaning']:
+            results = data['target_meaning'][selected_option]
+        elif category == 'common_words' and selected_option in data['common_words']:
+            results = data['common_words'][selected_option]
 
-        if selected_category == 'subject':
-            results = [s for s in data['subjects'] if s['name'] == selected_option]
-        elif selected_category == 'symbol':
-            results = [s for s in data['symbols'] if s['name'] == selected_option]
+        return render_template('view_option.html', results=results, target_meaning=list(data['target_meaning'].keys()), common_words=list(data['common_words'].keys()))
+    l = list(data['target_meaning'].keys())
+    l2 = list(data['common_words'].keys())
+    print("here2", l , l2, type(l), type(l2), l[0], type(l[0]))
+    return render_template('view_option.html', target_meaning=list(data['target_meaning'].keys()), common_words=list(data['common_words'].keys()))
 
-    return render_template('view_option.html', subjects=subjects, symbols=symbols, results=results)
-
-
+@app.route('/add', methods=['GET'])
+def add_option():
+    return render_template('add_options.html')
 
 @app.route('/add/subject', methods=['GET', 'POST'])
 def add_subject():
     data = read_data()
     if request.method == 'POST':
-        subject_type = request.form.get('subject_type')
-        subject = {
-            "type": subject_type,
-            "name": request.form.get('new_subject') if subject_type == 'new' else request.form.get('existing_subject'),
-            "surah_name": request.form.get('surah_name'),
-            "from_verse": request.form.get('from_verse'),
-            "to_verse": request.form.get('to_verse')
-        }
-        data['subjects'].append(subject)
+        meaning_type = request.form['subject_type']
+        surah_name = request.form['surah_name']
+        from_verse = request.form['from_verse']
+        to_verse = request.form['to_verse']
+
+        if meaning_type == 'new':
+            new_meaning = request.form['new_subject']
+            data['target_meaning'][new_meaning] = [{
+                'surah_name': surah_name,
+                'from_verse': from_verse,
+                'to_verse': to_verse
+            }]
+        elif meaning_type == 'existing':
+            existing_meaning = request.form['existing_subject']
+            if existing_meaning in data['target_meaning']:
+                data['target_meaning'][existing_meaning].append({
+                    'surah_name': surah_name,
+                    'from_verse': from_verse,
+                    'to_verse': to_verse
+                })
+
         write_data(data)
         return "Subject added successfully!"
-    return render_template('add_subject.html', existing_subjects=[s['name'] for s in data['subjects']])
+
+    existing_meanings = list(data['target_meaning'].keys())
+    return render_template('add_target_meaning.html', existing_subjects=existing_meanings)
 
 @app.route('/add/symbol', methods=['GET', 'POST'])
 def add_symbol():
     data = read_data()
     if request.method == 'POST':
-        symbol_type = request.form.get('symbol_type')
-        symbol = {
-            "type": symbol_type,
-            "name": request.form.get('new_symbol') if symbol_type == 'new' else request.form.get('existing_symbol') if symbol_type == 'existing' else request.form.get('search_symbol'),
-            "surah_name": request.form.get('surah_name'),
-            "from_verse": request.form.get('from_verse'),
-            "to_verse": request.form.get('to_verse')
-        }
-        data['symbols'].append(symbol)
+        word_type = request.form['symbol_type']
+        surah_name = request.form['surah_name']
+        from_verse = request.form['from_verse']
+        to_verse = request.form['to_verse']
+
+        if word_type == 'new':
+            new_word = request.form['new_symbol']
+            data['common_words'][new_word] = [{
+                'surah_name': surah_name,
+                'from_verse': from_verse,
+                'to_verse': to_verse
+            }]
+        elif word_type == 'existing':
+            existing_word = request.form['existing_symbol']
+            if existing_word in data['common_words']:
+                data['common_words'][existing_word].append({
+                    'surah_name': surah_name,
+                    'from_verse': from_verse,
+                    'to_verse': to_verse
+                })
         write_data(data)
         return "Symbol added successfully!"
-    return render_template('add_symbol.html', existing_symbols=[s['name'] for s in data['symbols']])
+    existing_word = list(data['common_words'].keys())
+    return render_template('add_symbol.html', existing_symbols=existing_word)
 
 @app.route('/api/search', methods=['POST'])
 def api_search():

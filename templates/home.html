@@ -1,42 +1,34 @@
-{% extends 'base.html' %}
-
-{% block content %}
-<div class="row mb-4">
-  <div class="col-md-6">
-    <button class="btn btn-primary" onclick="selectOption('add')">Add Option</button>
-    <button onclick="window.location.href='/view'" class="btn btn-primary">View Option</button>
-  </div>
-</div>
-
-<div id="second-row" class="row mb-4" style="display: none;">
-  <div class="col-md-6">
-    <button class="btn btn-secondary" onclick="selectSubOption('subject')">By Subject</button>
-    <button class="btn btn-secondary" onclick="selectSubOption('symbol')">By Symbol</button>
-  </div>
-</div>
-
-<div id="third-row" class="row mb-4" style="display: none;">
-  <!-- Content will be loaded dynamically based on the first and second rows -->
-</div>
-
-<div id="fourth-row" class="row mb-4" style="display: none;">
-  <!-- Verses info form -->
-  <div class="col-md-6">
-    <form id="verses-form">
-      <div class="form-group">
-        <label for="surah-name">Surah Name</label>
-        <input type="text" class="form-control" id="surah-name" required>
-      </div>
-      <div class="form-group">
-        <label for="from-verse">From Verse</label>
-        <input type="number" class="form-control" id="from-verse" required>
-      </div>
-      <div class="form-group">
-        <label for="to-verse">To Verse</label>
-        <input type="number" class="form-control" id="to-verse" required>
-      </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-  </div>
-</div>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quran Memorization</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Quran Memorization</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <button onclick="window.location.href='/view'" class="btn btn-primary mr-2">View Similarities</button>
+                </li>
+                <li class="nav-item">
+                    <button onclick="window.location.href='/add'" class="btn btn btn-primary mr-2">Add Similarities</button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <h1 class="text-center">Welcome to the Quran Memorization App</h1>
+        <p class="text-center">Select an option to get started</p>
+        <div class="row justify-content-center">
+            <div class="col-md-6 text-center">
+                <button onclick="window.location.href='/view'" class="btn btn-primary btn-lg mr-2">View Similarities</button>
+                <button onclick="window.location.href='/add'" class="btn btn-primary btn-lg mr-2">Add Similarities</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

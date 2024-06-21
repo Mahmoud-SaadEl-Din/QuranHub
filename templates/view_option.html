@@ -1,68 +1,85 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Option</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h2>View Option</h2>
+        <form method="post" action="/view">
+            <div class="form-group">
+                <label for="view-category">Select Category:</label>
+                <select class="form-control" id="view-category" name="view_category" onchange="populateOptions(this.value)">
+                    <option value="target_meaning">Target Meaning</option>
+                    <option value="common_words">Common Words</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="view-input">Select Option:</label>
+                <select class="form-control" id="view-input" name="view_input" required>
+                    <!-- Options will be populated dynamically by JavaScript -->
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
 
-{% block content %}
-<h2>View Option</h2>
-<form method="get" action="/view">
-  <div class="form-group">
-    <label for="view-category">Select Category:</label>
-    <select class="form-control" id="view-category" name="view_category" onchange="populateOptions(this.value)">
-      <option value="subject">Subject</option>
-      <option value="symbol">Symbol</option>
-    </select>
-  </div>
-  <div class="form-group">
-    <label for="view-input">Select Option:</label>
-    <select class="form-control" id="view-input" name="view_input" required>
-      <!-- Options will be populated dynamically by JavaScript -->
-    </select>
-  </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
 
-{% if results %}
-  <h3>Results</h3>
-  <table class="table table-bordered">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Surah Name</th>
-        <th>From Verse</th>
-        <th>To Verse</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for result in results %}
-      <tr>
-        <td>{{ result.name }}</td>
-        <td>{{ result.surah_name }}</td>
-        <td>{{ result.from_verse }}</td>
-        <td>{{ result.to_verse }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-{% endif %}
+        {% if results %}
+            <h2 class="my-4">Results</h2>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>To Verse</th>
+                            <th>From Verse</th>
+                            <th>Surah Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for result in results %}
+                            <tr>
+                                <td>{{ result['to_verse'] }}</td>
+                                <td>{{ result['from_verse'] }}</td>
+                                <td>{{ result['surah_name'] }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
 
-<script>
-const subjects = {{ subjects | tojson }};
-const symbols = {{ symbols | tojson }};
+        <script>
+          const targetMeaning = {{ target_meaning | tojson }};
+          const commonWords = {{ common_words | tojson }};
+      
+          function populateOptions(category) {
+              const viewInput = document.getElementById('view-input');
+              viewInput.innerHTML = '';
+      
+              let options = [];
+              if (category === 'target_meaning') {
+                  options = targetMeaning;
+              } else if (category === 'common_words') {
+                  options = commonWords;
+              }
+      
+              options.forEach(option => {
+                  let opt = document.createElement('option');
+                  opt.value = option;
+                  opt.textContent = option;
+                  viewInput.appendChild(opt);
+              });
+          }
+      
+          // Initialize the dropdown based on the current selection
+          document.addEventListener('DOMContentLoaded', function() {
+              populateOptions(document.getElementById('view-category').value);
+          });
+      </script>
 
-function populateOptions(category) {
-  const viewInput = document.getElementById('view-input');
-  viewInput.innerHTML = '';
-
-  let options = category === 'subject' ? subjects : symbols;
-  options.forEach(option => {
-    let opt = document.createElement('option');
-    opt.value = option;
-    opt.innerHTML = option;
-    viewInput.appendChild(opt);
-  });
-}
-
-// Initialize the dropdown based on the current selection
-document.addEventListener('DOMContentLoaded', function() {
-  populateOptions(document.getElementById('view-category').value);
-});
-</script>
-{% endblock %}
+    </div>
+</body>
+</html>

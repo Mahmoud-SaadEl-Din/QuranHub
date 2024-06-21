@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Target meaning of verses</h2>
+    <form method="post" class="mt-4">
+        <div class="form-group">
+            <label for="subject_type">New data?:</label>
+            <select class="form-control" id="subject_type" name="subject_type">
+                <option value="new">New</option>
+                <option value="existing">Existing</option>
+            </select>
+        </div>
+        <div class="form-group" id="new_subject_group">
+            <label for="new_subject">New target meaning:</label>
+            <input type="text" class="form-control" id="new_subject" name="new_subject">
+        </div>
+        <div class="form-group" id="existing_subject_group" style="display: none;">
+            <label for="existing_subject">Existing target meaning:</label>
+            <select class="form-control" id="existing_subject" name="existing_subject">
+                {% for subject in existing_subjects %}
+                <option value="{{ subject }}">{{ subject }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="surah_name">Surah Name:</label>
+            <input type="text" class="form-control" id="surah_name" name="surah_name">
+        </div>
+        <div class="form-group">
+            <label for="from_verse">From Verse:</label>
+            <input type="number" class="form-control" id="from_verse" name="from_verse">
+        </div>
+        <div class="form-group">
+            <label for="to_verse">To Verse:</label>
+            <input type="number" class="form-control" id="to_verse" name="to_verse">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+<script>
+document.getElementById('subject_type').addEventListener('change', function() {
+    var type = this.value;
+    if (type == 'new') {
+        document.getElementById('new_subject_group').style.display = 'block';
+        document.getElementById('existing_subject_group').style.display = 'none';
+    } else {
+        document.getElementById('new_subject_group').style.display = 'none';
+        document.getElementById('existing_subject_group').style.display = 'block';
+    }
+});
+</script>
+{% endblock %}

@@ -1,78 +1,65 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Add Symbol</h2>
-<form method="post">
-  <div class="form-group">
-    <label for="symbol-type">Choose Type</label>
-    <select class="form-control" id="symbol-type" name="symbol_type" onchange="handleSymbolTypeChange(this.value)">
-      <option value="new">New</option>
-      <option value="existing">Existing</option>
-      <option value="search">Search Existing</option>
-    </select>
-  </div>
-  <div id="new-symbol" class="form-group">
-    <label for="new-symbol-input">New Symbol</label>
-    <input type="text" class="form-control" id="new-symbol-input" name="new_symbol">
-  </div>
-  <div id="existing-symbol" class="form-group" style="display: none;">
-    <label for="existing-symbol-select">Existing Symbol</label>
-    <select class="form-control" id="existing-symbol-select" name="existing_symbol">
-      {% for symbol in existing_symbols %}
-      <option value="{{ symbol }}">{{ symbol }}</option>
-      {% endfor %}
-    </select>
-  </div>
-  <div id="search-symbol" class="form-group" style="display: none;">
-    <label for="search-symbol-input">Search Symbol</label>
-    <input type="text" class="form-control" id="search-symbol-input" name="search_symbol" onkeyup="searchSymbol(this.value)">
-    <div id="search-results"></div>
-  </div>
-  <div class="form-group">
-    <label for="surah-name">Surah Name</label>
-    <input type="text" class="form-control" id="surah-name" name="surah_name" required>
-  </div>
-  <div class="form-group">
-    <label for="from-verse">From Verse</label>
-    <input type="number" class="form-control" id="from-verse" name="from_verse" required>
-  </div>
-  <div class="form-group">
-    <label for="to-verse">To Verse</label>
-    <input type="number" class="form-control" id="to-verse" name="to_verse" required>
-  </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+<div class="container mt-5">
+    <h2 class="text-center">Add common/same words</h2>
+    <form method="post" class="mt-4">
+        <div class="form-group">
+            <label for="symbol_type">common/same words Type:</label>
+            <select class="form-control" id="symbol_type" name="symbol_type">
+                <option value="new">New</option>
+                <option value="existing">Existing</option>
+                <option value="search">Search Existing</option>
+            </select>
+        </div>
+        <div class="form-group" id="new_symbol_group">
+            <label for="new_symbol">New common/same words:</label>
+            <input type="text" class="form-control" id="new_symbol" name="new_symbol">
+        </div>
+        <div class="form-group" id="existing_symbol_group" style="display: none;">
+            <label for="existing_symbol">Existing common/same words Name:</label>
+            <select class="form-control" id="existing_symbol" name="existing_symbol">
+                {% for symbol in existing_symbols %}
+                <option value="{{ symbol }}">{{ symbol }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group" id="search_symbol_group" style="display: none;">
+            <label for="search_symbol">Search common/same words:</label>
+            <input type="text" class="form-control" id="search_symbol" name="search_symbol">
+        </div>
+        <div class="form-group">
+            <label for="surah_name">Surah Name:</label>
+            <input type="text" class="form-control" id="surah_name" name="surah_name">
+        </div>
+        <div class="form-group">
+            <label for="from_verse">From Verse:</label>
+            <input type="number" class="form-control" id="from_verse" name="from_verse">
+        </div>
+        <div class="form-group">
+            <label for="to_verse">To Verse:</label>
+            <input type="number" class="form-control" id="to_verse" name="to_verse">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
 
 <script>
-function handleSymbolTypeChange(value) {
-  document.getElementById('new-symbol').style.display = value === 'new' ? 'block' : 'none';
-  document.getElementById('existing-symbol').style.display = value === 'existing' ? 'block' : 'none';
-  document.getElementById('search-symbol').style.display = value === 'search' ? 'block' : 'none';
-}
-
-// Initialize the form display based on the current selection
-document.addEventListener('DOMContentLoaded', function() {
-  handleSymbolTypeChange(document.getElementById('symbol-type').value);
+document.getElementById('symbol_type').addEventListener('change', function() {
+    var type = this.value;
+    if (type == 'new') {
+        document.getElementById('new_symbol_group').style.display = 'block';
+        document.getElementById('existing_symbol_group').style.display = 'none';
+        document.getElementById('search_symbol_group').style.display = 'none';
+    } else if (type == 'existing') {
+        document.getElementById('new_symbol_group').style.display = 'none';
+        document.getElementById('existing_symbol_group').style.display = 'block';
+        document.getElementById('search_symbol_group').style.display = 'none';
+    } else {
+        document.getElementById('new_symbol_group').style.display = 'none';
+        document.getElementById('existing_symbol_group').style.display = 'none';
+        document.getElementById('search_symbol_group').style.display = 'block';
+    }
 });
-
-function searchSymbol(query) {
-  fetch('/api/search', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ query: query })
-  })
-  .then(response => response.json())
-  .then(data => {
-    const resultsDiv = document.getElementById('search-results');
-    resultsDiv.innerHTML = '';
-    data.forEach(item => {
-      const div = document.createElement('div');
-      div.textContent = item;
-      resultsDiv.appendChild(div);
-    });
-  });
-}
 </script>
 {% endblock %}
