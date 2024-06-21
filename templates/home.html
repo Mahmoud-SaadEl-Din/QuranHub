@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row mb-4">
+  <div class="col-md-6">
+    <button class="btn btn-primary" onclick="selectOption('add')">Add Option</button>
+    <button onclick="window.location.href='/view'" class="btn btn-primary">View Option</button>
+  </div>
+</div>
+
+<div id="second-row" class="row mb-4" style="display: none;">
+  <div class="col-md-6">
+    <button class="btn btn-secondary" onclick="selectSubOption('subject')">By Subject</button>
+    <button class="btn btn-secondary" onclick="selectSubOption('symbol')">By Symbol</button>
+  </div>
+</div>
+
+<div id="third-row" class="row mb-4" style="display: none;">
+  <!-- Content will be loaded dynamically based on the first and second rows -->
+</div>
+
+<div id="fourth-row" class="row mb-4" style="display: none;">
+  <!-- Verses info form -->
+  <div class="col-md-6">
+    <form id="verses-form">
+      <div class="form-group">
+        <label for="surah-name">Surah Name</label>
+        <input type="text" class="form-control" id="surah-name" required>
+      </div>
+      <div class="form-group">
+        <label for="from-verse">From Verse</label>
+        <input type="number" class="form-control" id="from-verse" required>
+      </div>
+      <div class="form-group">
+        <label for="to-verse">To Verse</label>
+        <input type="number" class="form-control" id="to-verse" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{
+    "subjects": [
+        {
+            "type": "new",
+            "name": "\u0627\u0644\u0631\u0632\u0642",
+            "surah_name": "\u0627\u0644\u0631\u0648\u0645",
+            "from_verse": "50",
+            "to_verse": "51"
+        },
+        {
+            "type": "new",
+            "name": "\u0627\u0644\u062c\u0646\u0629",
+            "surah_name": "\u0627\u0644\u0639\u0646\u0643\u0628\u0648\u062a",
+            "from_verse": "65",
+            "to_verse": "69"
+        },
+        {
+            "type": "new",
+            "name": "\u0627\u0644\u0646\u0627\u0631",
+            "surah_name": "\u0627\u0644\u0631\u0648\u0645",
+            "from_verse": "70",
+            "to_verse": "72"
+        }
+    ],
+    "symbols": []
+}
